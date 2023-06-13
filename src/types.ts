@@ -1,10 +1,10 @@
-import type React from 'react';
 import type {
   SkFont,
   DataSourceParam,
   SkiaMutableValue,
   SkiaValue,
 } from '@shopify/react-native-skia';
+import type { ReactNode } from 'react';
 
 export interface ChartPoint {
   x: string;
@@ -59,7 +59,7 @@ export interface TooltipProps {
   setContent?: (content: string) => void;
   width?: number;
   height?: number;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export interface LineChartTooltipProps extends Omit<TooltipProps, 'children'> {

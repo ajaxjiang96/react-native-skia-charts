@@ -10,7 +10,6 @@ import {
   Text,
   useComputedValue,
   useFont,
-  useSharedValueEffect,
   useValue,
 } from '@shopify/react-native-skia';
 import { scaleLinear, scalePoint } from 'd3-scale';
@@ -51,7 +50,6 @@ export const LineChart = memo(
     const [canvasWidth, setCanvasWidth] = useState(CHART_WIDTH);
     const [canvasHeight, setCanvasHeight] = useState(CHART_HEIGHT);
     const [, setIsTouchActive] = useState<boolean>(false);
-    const skiaX = useValue(0);
 
     // define chart boundaries
     // const startDate = startDateProp || getMinMaxDate(data, 'min');
@@ -69,11 +67,7 @@ export const LineChart = memo(
       height: canvasHeight,
     };
 
-    const {
-      x: reanimatedX,
-      gesture,
-      isActive,
-    } = usePanGesture({
+    const { gesture, isActive } = usePanGesture({
       xScaleBounds,
     });
     const font = useFont(fontFile, fontSize);
@@ -105,11 +99,6 @@ export const LineChart = memo(
       },
       [isActive]
     );
-
-    // connect Reanimated values to Skia values
-    useSharedValueEffect(() => {
-      skiaX.current = reanimatedX.value;
-    }, reanimatedX);
 
     const xScale = scalePoint()
       .domain(data.map((d) => d.x.toString()))

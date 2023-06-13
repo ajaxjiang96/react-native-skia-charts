@@ -48,7 +48,7 @@ export const StackedBarChart = memo(
     paddingVertical = CHART_VERTICAL_MARGIN,
     barWidth: barWidthProp = CHART_BAR_WIDTH,
     datasets = [],
-    borderRadius = CHART_BAR_RADIUS
+    borderRadius = CHART_BAR_RADIUS,
   }: BarChartProps) => {
     const [canvasWidth, setCanvasWidth] = useState(CHART_WIDTH);
     const [canvasHeight, setCanvasHeight] = useState(CHART_HEIGHT);
@@ -134,17 +134,20 @@ export const StackedBarChart = memo(
         .reverse(); // reverse final array in order to prevent overlapping while rendering
     }, [stackedData, barsAnimationState]);
 
-    const animateBars = (from: number = 0, to: number = 1) => {
-      barsAnimationState.current = from;
-      runTiming(barsAnimationState, to, {
-        duration: 1000,
-        easing: Easing.inOut(Easing.exp),
-      });
-    };
+    const animateBars = useCallback(
+      (from: number = 0, to: number = 1) => {
+        barsAnimationState.current = from;
+        runTiming(barsAnimationState, to, {
+          duration: 1000,
+          easing: Easing.inOut(Easing.exp),
+        });
+      },
+      [barsAnimationState]
+    );
 
     useEffect(() => {
       animateBars(0, 1);
-    }, [datasets]);
+    }, [animateBars, datasets]);
 
     const onLayout = useCallback(
       ({ nativeEvent: { layout } }: LayoutChangeEvent) => {
